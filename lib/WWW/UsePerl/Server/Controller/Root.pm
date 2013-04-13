@@ -81,7 +81,7 @@ A story entry
 
 =cut
 
-sub story : Regex('^article\.pl') {
+sub story : Path('article.pl') :Args(0) {
     my ( $self, $c ) = @_;
     my ($sid) = $c->request->param('sid');
     my $story
