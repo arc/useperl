@@ -65,9 +65,10 @@ along the lines of Archive Team (http://www.archiveteam.org) to save historical
 Perl websites and keep the content going. Using this module you can host your
 own use.perl.org mirror.
 
-You'll need a MySQL server. Update www_useperl_server.conf with the database
-connection details. Then import the (26MB compressed, 94MB uncompressed)
-database dump from:
+You'll need a MySQL server. Copy www_useperl_server.conf to a local file
+named www_useperl_server_local.conf, and update the new copy with the
+database connection details. Then import the (26MB compressed, 94MB
+uncompressed) database dump from:
 
     https://s3.amazonaws.com/useperl/useperl-2012-04-29.sql.bz2
 
