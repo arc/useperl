@@ -71,7 +71,7 @@ About
 
 =cut
 
-sub about : Path('about') {
+sub about : Path('about') :Args(0) {
     my ( $self, $c ) = @_;
 }
 
@@ -104,7 +104,7 @@ All stories
 
 =cut
 
-sub stories : Path('stories') {
+sub stories : Path('stories') :Args(0) {
     my ( $self, $c ) = @_;
     my $current_page = $c->request->param('page') || 1;
     my $stories = $c->model('DB::Story')->search(
@@ -148,7 +148,7 @@ All authors
 
 =cut
 
-sub authors : Path('authors') {
+sub authors : Path('authors') :Args(0) {
     my ( $self, $c ) = @_;
     my $current_page = $c->request->param('page') || 1;
     my $users = $c->model('DB::User')->search(
@@ -195,7 +195,7 @@ All journal entries
 
 =cut
 
-sub journals : Path('journals') {
+sub journals : Path('journals') :Args(0) {
     my ( $self, $c ) = @_;
     my $current_page = $c->request->param('page') || 1;
     my $journals = $c->model('DB::Journal')->search(
