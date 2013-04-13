@@ -10,7 +10,7 @@
 </blockquote>
 [% END %]
 [% END %]
-<h2>[% comment.subject | html %]</h2>
+<h2 id="comment-[% comment.id %]">[% comment.subject | html %]</h2>
 <h3><a href="[% c.uri_for('~' _ comment.user.nickname _ '/' ) %]">[% comment.user.nickname |
         html %]</a> on [% comment.date | html %]</h3>
 [% comment.comment_html %]
