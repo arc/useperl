@@ -201,7 +201,7 @@ sub comments : Regex('^comments[0-9a-f]{4}\.html') {
     my $sid = $c->request->param('sid') // die "No SID param\n";
     if ($c->model('DB::Story')->count({ sid => $sid })) {
         my $uri = $c->uri_for('/article.pl', { sid => $sid });
-        $c->response->redirect($uri, 301);
+        return $self->redirect_to_comment($c, scalar $c->request->param('cid'), $uri);
     }
     else {
         my $comment = $c->model('DB::Comment')->search_rs({
@@ -212,8 +212,15 @@ sub comments : Regex('^comments[0-9a-f]{4}\.html') {
         })->first // die "SID not found\n";
         my $journal = $comment->journal;
         my $uri = $c->uri_for('/~'.$journal->user->nickname, 'journal', $journal->id);
-        $c->response->redirect($uri, 301);
+        return $self->redirect_to_comment($c, $comment->cid, $uri);
     }
+}
+
+sub redirect_to_comment {
+    my ( $self, $c, $cid, $uri ) = @_;
+    $uri->fragment("comment-$cid") if $cid;
+    $c->response->redirect($uri, 301);
+    return;
 }
 
 =head2 journal entries
