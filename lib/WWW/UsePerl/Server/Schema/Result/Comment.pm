@@ -159,6 +159,8 @@ __PACKAGE__->set_primary_key("cid");
 
 __PACKAGE__->belongs_to('user', 'WWW::UsePerl::Server::Schema::Result::User', 'uid');
 
+__PACKAGE__->belongs_to('journal', 'WWW::UsePerl::Server::Schema::Result::Journal', 'journal_id');
+
 sub comment_html {
     my $self = shift;
     my $comment = $self->comment;

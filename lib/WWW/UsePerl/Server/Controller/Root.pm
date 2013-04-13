@@ -197,19 +197,23 @@ Redirect from per-comment pages to the original journal piece.
 
 sub comments : Regex('^comments[0-9a-f]{4}\.html') {
     my ( $self, $c ) = @_;
+    # An sid can uniquely identify either a story or a journal.
     my $sid = $c->request->param('sid') // die "No SID param\n";
-    my $journal_id = $c->model('DB::Comment')->search_rs({
-        sid => $sid,
-    }, {
-        rows => 1,
-    })->get_column('journal_id')->first // die "SID not found\n";
-    my $journal = $c->model('DB::Journal')->search_rs({
-        id => $journal_id,
-    }, {
-        prefetch => 'user',
-    })->single;
-    my $uri = $c->uri_for('/~'.$journal->user->nickname, 'journal', $journal_id);
-    $c->response->redirect($uri, 301);
+    if ($c->model('DB::Story')->count({ sid => $sid })) {
+        my $uri = $c->uri_for('/article.pl', { sid => $sid });
+        $c->response->redirect($uri, 301);
+    }
+    else {
+        my $comment = $c->model('DB::Comment')->search_rs({
+            sid => $sid,
+        }, {
+            rows => 1,
+            prefetch => { journal => 'user' },
+        })->first // die "SID not found\n";
+        my $journal = $comment->journal;
+        my $uri = $c->uri_for('/~'.$journal->user->nickname, 'journal', $journal->id);
+        $c->response->redirect($uri, 301);
+    }
 }
 
 =head2 journal entries
