@@ -189,6 +189,29 @@ sub journal : Regex('^~([^/]+)/journal/(\d+)$') {
     $c->stash->{comments} = [ $comments->all ];
 }
 
+=head2 comments
+
+Redirect from per-comment pages to the original journal piece.
+
+=cut
+
+sub comments : Regex('^comments[0-9a-f]{4}\.html') {
+    my ( $self, $c ) = @_;
+    my $sid = $c->request->param('sid') // die "No SID param\n";
+    my $journal_id = $c->model('DB::Comment')->search_rs({
+        sid => $sid,
+    }, {
+        rows => 1,
+    })->get_column('journal_id')->first // die "SID not found\n";
+    my $journal = $c->model('DB::Journal')->search_rs({
+        id => $journal_id,
+    }, {
+        prefetch => 'user',
+    })->single;
+    my $uri = $c->uri_for('/~'.$journal->user->nickname, 'journal', $journal_id);
+    $c->response->redirect($uri, 301);
+}
+
 =head2 journal entries
 
 All journal entries
