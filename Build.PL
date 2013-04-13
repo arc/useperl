@@ -21,6 +21,7 @@ my $build = Module::Build->new(
     module_name => 'WWW::UsePerl::Server',
     requires    => {
         'Catalyst::Action::RenderView'     => 0,
+        'Catalyst::Model::DBIC::Schema'    => 0,
         'Catalyst::Plugin::ConfigLoader'   => 0,
         'Catalyst::Plugin::Static::Simple' => 0,
         'Catalyst::Runtime'                => 0,
@@ -31,6 +32,7 @@ my $build = Module::Build->new(
         'DBI'                              => 0,
         'DBD::mysql'                       => 0,
         'Moose'                            => 0,
+        'MooseX::NonMoose'                 => 0,
         'namespace::autoclean'             => 0,
         'Template::Plugin::Comma'          => 0,
     },
